@@ -1,5 +1,5 @@
-from core.database_settings import execute_query
-from core.database_settings import execute_query
+from database_settings import execute_query
+from database_settings import execute_query
 
 authors = """
             CREATE TABLE IF NOT EXISTS authors (
@@ -39,8 +39,17 @@ borrows = """
                 returned_at TIMESTAMP NULL
             );
            """
+def initializing_tables():
+    execute_query(query=authors)
+    execute_query(query=users)
+    execute_query(query=books)
+    execute_query(query=borrows)
 
 
+        
+if __name__ == "__main__":
+    initializing_tables()
+    print("To-Do table created successfully!")
 
 
 
