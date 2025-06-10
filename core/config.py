@@ -19,3 +19,4 @@ DB_CONFIG = {
     "host": DB_HOST,
     "password": DB_PASS
 }
+
