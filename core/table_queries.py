@@ -1,5 +1,5 @@
 from database_settings import execute_query
-from database_settings import execute_query
+
 
 authors = """
             CREATE TABLE IF NOT EXISTS authors (
@@ -49,7 +49,7 @@ def initializing_tables():
         
 if __name__ == "__main__":
     initializing_tables()
-    print("To-Do table created successfully!")
+    print("tables created successfully!")
 
 
 

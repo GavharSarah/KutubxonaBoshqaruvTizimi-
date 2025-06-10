@@ -4,7 +4,7 @@ from typing import Optional, Union, Any
 import psycopg2
 from psycopg2.extras import DictCursor, DictRow
 
-from core.config import DB_CONFIG
+from config import DB_CONFIG
 
 logging.basicConfig(level=logging.INFO, filename='logs.log')
 logger = logging.getLogger(__name__)
