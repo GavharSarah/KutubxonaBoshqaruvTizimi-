@@ -3,33 +3,49 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 import crud
+from users.views import register, login
+from core.table_queries import initializing_tables
 
 
+current_user = None
 
-def login_menu():
-    print("=== Kutubxona Tizimiga Xush kelibsiz ===")
-    print("1. Admin sifatida kirish")
-    print("2. Foydalanuvchi sifatida kirish")
-    choice = input("Tanlang (1/2): ")
 
-    if choice == '1':
-        email = input("Admin email: ").strip()
-        password = input("Parol: ").strip()
-       
-        if email == "admin@kutubxona.uz" and password == "admin123":
-            print("Admin sifatida tizimga kirdingiz.")
-            crud.admin_menu()
+def auth_menu():
+    global current_user
+
+    while True:
+        print("\nWelcome to the authentication menu!")
+        print("1. Register")
+        print("2. Login")
+        print("3. Exit")
+        choice = input("Please choose an option: ")
+
+        if choice == '1':
+            register()
+        elif choice == '2':
+            user = login()
+            if user == "admin":
+                current_user = "admin"
+                return crud.admin_menu()
+            elif user:
+                current_user = user
+                return crud.user_menu()
+            else:
+                continue
+        elif choice == '3':
+            print("Exiting")
+            exit()
         else:
-            print("Xato! Email yoki parol noto‘g‘ri.")
-    elif choice == '2':
-        name = input("Ismingizni kiriting: ").strip()
-        print(f"Xush kelibsiz, {name}!")
-        crud.user_menu()
-    else:
-        print("Notogri tanlov.")
+            print("Invalid choice. Try again.")
+
+
+
+
+
 
 if __name__ == "__main__":
-    login_menu()
+    initializing_tables()
 
 
 
+    auth_menu()

@@ -42,7 +42,7 @@ def admin_menu():
             for row in rows:
                 print(f"{row['id']} - {row['full_name']} - {row['title']} - {row['borrowed_at']} - {row['returned_at']}")
         elif choice == "5":
-            # Example statistic: most borrowed books
+            #  most borrowed books
             rows = execute_query("""
                 SELECT bk.title, COUNT(*) AS borrow_count
                 FROM borrows b
@@ -58,9 +58,8 @@ def admin_menu():
         else:
             print("Noto'g'ri tanlov.")
 
-#  USER MENU
 def user_menu():
-    user_id = int(input("Foydalanuvchi ID-ni kiriting: "))  
+    from main import current_user  # Access current logged-in user
 
     while True:
         print("\n--- Foydalanuvchi Paneli ---")
@@ -80,6 +79,7 @@ def user_menu():
             """, fetch="all")
             for b in books:
                 print(f"{b['id']} - {b['title']} ({b['full_name']}) - Qolgan: {b['available_count']}")
+        
         elif choice == "2":
             name = input("Muallif ismi: ")
             books = execute_query("""
@@ -90,24 +90,35 @@ def user_menu():
             """, (f"%{name}%",), fetch="all")
             for b in books:
                 print(f"{b['title']} - Qolgan: {b['available_count']}")
+        
         elif choice == "3":
             book_id = int(input("Kitob ID: "))
-            # check availability
             book = execute_query("SELECT available_count FROM books WHERE id = %s;", (book_id,), fetch="one")
             if book and book['available_count'] > 0:
-                execute_query("INSERT INTO borrows(user_id, book_id) VALUES (%s, %s);", (user_id, book_id))
-                execute_query("UPDATE books SET available_count = available_count - 1 WHERE id = %s;", (book_id,))
+                execute_query(
+                    "INSERT INTO borrows(user_id, book_id) VALUES (%s, %s);",
+                    (current_user["id"], book_id)
+                )
+                execute_query(
+                    "UPDATE books SET available_count = available_count - 1 WHERE id = %s;",
+                    (book_id,)
+                )
                 print("Kitob ijaraga olindi.")
             else:
                 print("Bu kitob hozircha mavjud emas.")
+        
         elif choice == "4":
             book_id = int(input("Kitob ID: "))
             execute_query("""
                 UPDATE borrows SET returned_at = CURRENT_TIMESTAMP
                 WHERE user_id = %s AND book_id = %s AND returned_at IS NULL;
-            """, (user_id, book_id))
-            execute_query("UPDATE books SET available_count = available_count + 1 WHERE id = %s;", (book_id,))
+            """, (current_user["id"], book_id))
+            execute_query(
+                "UPDATE books SET available_count = available_count + 1 WHERE id = %s;",
+                (book_id,)
+            )
             print("Kitob qaytarildi.")
+        
         elif choice == "5":
             rows = execute_query("""
                 SELECT bk.title, b.borrowed_at, b.returned_at
@@ -115,9 +126,11 @@ def user_menu():
                 JOIN books bk ON b.book_id = bk.id
                 WHERE b.user_id = %s
                 ORDER BY b.borrowed_at DESC;
-            """, (user_id,), fetch="all")
+            """, (current_user["id"],), fetch="all")
             for row in rows:
-                print(f"{row['title']} - {row['borrowed_at']} - {'Qaytarilgan' if row['returned_at'] else 'Ijara davomida'}")
+                status = "Qaytarilgan" if row["returned_at"] else "Ijara davomida"
+                print(f"{row['title']} - {row['borrowed_at']} - {status}")
+        
         elif choice == "0":
             break
         else:
