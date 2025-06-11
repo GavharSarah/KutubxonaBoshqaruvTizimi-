@@ -1,4 +1,4 @@
-from database_settings import execute_query
+from core.database_settings import execute_query
 
 
 authors = """
@@ -39,17 +39,18 @@ borrows = """
                 returned_at TIMESTAMP NULL
             );
            """
+
 def initializing_tables():
-    execute_query(query=authors)
-    execute_query(query=users)
-    execute_query(query=books)
-    execute_query(query=borrows)
+    print("Starting table creation...")
+    execute_query(authors)
+    execute_query(users)
+    execute_query(books)
+    execute_query(borrows)
+    print("All queries executed")
 
-
-        
 if __name__ == "__main__":
     initializing_tables()
-    print("tables created successfully!")
+    print("Check psql with '\\dt' to verify tables")
 
 
 

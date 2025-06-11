@@ -4,7 +4,7 @@ from typing import Optional, Union, Any
 import psycopg2
 from psycopg2.extras import DictCursor, DictRow
 
-from config import DB_CONFIG
+from core.config import DB_CONFIG
 
 logging.basicConfig(level=logging.INFO, filename='logs.log')
 logger = logging.getLogger(__name__)
@@ -18,6 +18,8 @@ class DatabaseManager:
     def __enter__(self) -> "DatabaseManager":
         self.conn = psycopg2.connect(**DB_CONFIG)
         self.cursor = self.conn.cursor(cursor_factory=DictCursor)
+        logger.info("Connected to DB: %s", DB_CONFIG['database'])
+
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
