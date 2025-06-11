@@ -2,13 +2,11 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-import crud
 from users.views import register, login
 from core.table_queries import initializing_tables
-
+import crud  
 
 current_user = None
-
 
 def auth_menu():
     global current_user
@@ -39,13 +37,12 @@ def auth_menu():
             print("Invalid choice. Try again.")
 
 
-
-
-
-
 if __name__ == "__main__":
     initializing_tables()
-
-
-
     auth_menu()
+
+
+
+
+
+

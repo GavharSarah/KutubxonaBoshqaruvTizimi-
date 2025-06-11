@@ -1,5 +1,6 @@
 from core.database_settings import execute_query
 
+
 # ADMIN MENU 
 def admin_menu():
     while True:
