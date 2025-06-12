@@ -10,6 +10,7 @@ def admin_menu():
         print("3. Foydalanuvchilar ro'yxati")
         print("4. Barcha ijaralar")
         print("5. Statistika")
+        print("6 Kitob ochirish")
         print("0. Orqaga")
 
         choice = input("Tanlang: ")
@@ -20,14 +21,36 @@ def admin_menu():
             print("Muallif qo'shildi.")
         elif choice == "2":
             title = input("Kitob nomi: ")
-            author_id = int(input("Muallif ID: "))
+            author_name = input("Muallif ismi: ")
+
+            # 1. Muallifni qidirish
+            author = execute_query(
+                "SELECT id FROM authors WHERE full_name ILIKE %s;",
+                (f"%{author_name}%",),
+                fetch="one"
+            )
+
+            if not author:
+                # 2. Topilmasa, yangi muallifni qo‘shish
+                execute_query("INSERT INTO authors(full_name) VALUES (%s);", (author_name,))
+                author = execute_query(
+                    "SELECT id FROM authors WHERE full_name = %s;",
+                    (author_name,),
+                    fetch="one"
+                )
+                print(f"Yangi muallif qo'shildi: {author_name}")
+
+            author_id = author["id"]
+
             published_at = input("Nashr sanasi (YYYY-MM-DD): ")
             total = int(input("Jami nusxa: "))
+
             execute_query("""
                 INSERT INTO books(title, author_id, published_at, total_count, available_count)
                 VALUES (%s, %s, %s, %s, %s);
             """, (title, author_id, published_at, total, total))
             print("Kitob qo'shildi.")
+
         elif choice == "3":
             rows = execute_query("SELECT * FROM users;", fetch="all")
             for user in rows:
@@ -54,13 +77,28 @@ def admin_menu():
             print("Eng ko'p ijaraga olingan kitoblar:")
             for row in rows:
                 print(f"{row['title']} - {row['borrow_count']} marta")
+        elif choice == "6":
+            books = execute_query("SELECT id, title FROM books;", fetch="all")
+            print("Kitoblar:")
+            for b in books:
+                print(f"{b['id']} - {b['title']}")
+            
+            book_id = input("O‘chirmoqchi bo‘lgan kitob ID sini kiriting: ")
+
+            confirm = input("Haqiqatan ham o‘chirmoqchimisiz? (ha/yoq): ")
+            if confirm.lower() == "ha":
+                execute_query("DELETE FROM books WHERE id = %s;", (book_id,))
+                print("Kitob o‘chirildi.")
+            else:
+                print("O‘chirish bekor qilindi.")
+
         elif choice == "0":
             break
         else:
             print("Noto'g'ri tanlov.")
 
-def user_menu():
-    from main import current_user  # Access current logged-in user
+def user_menu(current_user):
+    
 
     while True:
         print("\n--- Foydalanuvchi Paneli ---")
@@ -69,6 +107,7 @@ def user_menu():
         print("3. Kitobni ijaraga olish")
         print("4. Kitobni qaytarish")
         print("5. Mening ijaralarim")
+        
         print("0. Orqaga")
 
         choice = input("Tanlang: ")
@@ -136,3 +175,5 @@ def user_menu():
             break
         else:
             print("Noto'g'ri tanlov.")
+
+

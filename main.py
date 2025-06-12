@@ -27,7 +27,7 @@ def auth_menu():
                 return crud.admin_menu()
             elif user:
                 current_user = user
-                return crud.user_menu()
+                return crud.user_menu(current_user)
             else:
                 continue
         elif choice == '3':
