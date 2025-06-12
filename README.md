@@ -35,13 +35,13 @@ pscopg_kutubxona_project/
 ├── main.py                # Dastur ishga tushadigan asosiy fayl
 ├── requirements.txt       # Kutubxonalar ro‘yxati
 └── README.md              # Loyiha haqida ma’lumot
-# Ornatish
+## Ornatish
 git clone https://github.com/username/pscopg_kutubxona_project.git
 cd pscopg_kutubxona_project
 Virtual environment yarating va faollashtiring:
 python -m venv venv
 venv\Scripts\activate  # Windows
-# Kerakli kutubxonalarni o‘rnating:
+## Kerakli kutubxonalarni o‘rnating:
 Kerakli kutubxonalarni o‘rnating:
 pip install -r requirements.txt
 
