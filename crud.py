@@ -1,7 +1,6 @@
 from core.database_settings import execute_query
 
 
-# ADMIN MENU 
 def admin_menu():
     while True:
         print("\n--- Admin Panel ---")
@@ -23,7 +22,7 @@ def admin_menu():
             title = input("Kitob nomi: ")
             author_name = input("Muallif ismi: ")
 
-            # 1. Muallifni qidirish
+           
             author = execute_query(
                 "SELECT id FROM authors WHERE full_name ILIKE %s;",
                 (f"%{author_name}%",),
@@ -31,7 +30,7 @@ def admin_menu():
             )
 
             if not author:
-                # 2. Topilmasa, yangi muallifni qo‘shish
+                
                 execute_query("INSERT INTO authors(full_name) VALUES (%s);", (author_name,))
                 author = execute_query(
                     "SELECT id FROM authors WHERE full_name = %s;",
@@ -66,7 +65,7 @@ def admin_menu():
             for row in rows:
                 print(f"{row['id']} - {row['full_name']} - {row['title']} - {row['borrowed_at']} - {row['returned_at']}")
         elif choice == "5":
-            #  most borrowed books
+            
             rows = execute_query("""
                 SELECT bk.title, COUNT(*) AS borrow_count
                 FROM borrows b
