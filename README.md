@@ -37,13 +37,5 @@ pscopg_kutubxona_project/
 └── README.md              # Loyiha haqida ma’lumot
 
 
-## Texnologiyalar
 
-- Python
-- PostgreSQL
-
-## O'rnatish
-
-```bash
-pip install -r requirements.txt
 
