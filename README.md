@@ -39,7 +39,7 @@ pscopg_kutubxona_project/
 ---
 
 
-## Ornatish
+ ## Ornatish
 
 
 ---
@@ -55,7 +55,7 @@ venv\Scripts\activate  # Windows
 ---
 
 
-## Kerakli kutubxonalarni o‘rnating:
+ ## Kerakli kutubxonalarni o‘rnating:
 
 
 ---
